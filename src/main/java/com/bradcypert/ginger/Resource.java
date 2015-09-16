@@ -6,6 +6,7 @@ import spark.Response;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import static spark.Spark.*;
 
@@ -40,8 +41,7 @@ public class Resource {
 
 
     public void generateRoutes() {
-        String name = this.resourceClass.getSimpleName();
-
+        String name = this.resourceClass.getSimpleName().toLowerCase();
         for(String method: this.methods){
             switch(method){
                 case "GET":
@@ -59,8 +59,9 @@ public class Resource {
         }
     }
 
-    private String handleGet(Request request, Response response) {
-        return "";
+    private String handleGet(Request request, Response response) throws Exception {
+        Method fetch = this.resourceClass.getMethod("fetch");
+        return (String) fetch.invoke(this.resourceClass.newInstance());
     }
 
     private String handlePut(Request request, Response response) {

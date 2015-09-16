@@ -13,5 +13,7 @@ public class SampleResource {
 
     public void save(){}
 
-    public void fetch(){}
+    public String fetch(){
+        return "{something: something}";
+    }
 }
