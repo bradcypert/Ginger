@@ -1,6 +1,5 @@
 package com.bradcypert.ginger;
 
-import spark.Request;
 import spark.Response;
 
 import java.lang.annotation.Annotation;
@@ -8,6 +7,9 @@ import java.lang.reflect.Field;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static spark.Spark.*;
 
 public class Resource {
@@ -25,18 +27,21 @@ public class Resource {
     }
 
     private void generateExposedProperties() {
-        for (Field field: this.resourceClass.getFields()) {
-            this.exposedProperties.add(field.getName());
-        }
+        Field[] fields = this.resourceClass.getDeclaredFields();
+        Arrays.asList(fields).forEach(field ->
+            Arrays.asList(field.getDeclaredAnnotations()).forEach(annotation -> {
+                if(annotation.toString().endsWith("ginger.Exposed")){
+                    this.exposedProperties.add(field.getName());
+                }
+            })
+        );
     }
 
     private void generateResourceMethods() {
-        for (Annotation annotation: this.resourceClass.getAnnotations()) {
-            Methods methods = (Methods) annotation;
-            for(String method: methods.value()) {
-                this.methods.add(method);
-            }
-        }
+        Annotation[] annotations = this.resourceClass.getAnnotations();
+        Arrays.asList(annotations).forEach(annotation ->
+            Arrays.asList(((Methods) annotation).value()).forEach(value -> this.methods.add(value))
+        );
     }
 
 
@@ -53,26 +58,33 @@ public class Resource {
                 case "DELETE":
                     delete("/"+name+"/", this::handleDelete);
                     break;
-                case "PATCH":
-                    patch("/"+name+"/", this::handlePatch);
+                case "POST":
+                    post("/" + name + "/", this::handlePost);
             }
         }
     }
 
-    private String handleGet(Request request, Response response) throws Exception {
+    private String handleGet(spark.Request request, Response response) throws Exception {
         Method fetch = this.resourceClass.getMethod("fetch");
         return (String) fetch.invoke(this.resourceClass.newInstance());
     }
 
-    private String handlePut(Request request, Response response) {
+    private String handlePut(spark.Request request, Response response) {
         return "";
     }
 
-    private String handleDelete(Request request, Response response) {
+    private String handleDelete(spark.Request request, Response response) {
         return "";
     }
 
-    private String handlePatch(Request request, Response response) {
+    private String handlePost(spark.Request request, Response response) throws Exception {
+        Request req = (Request) request;
+        if(!this.exposedProperties.isEmpty() || !req.containsParams(this.exposedProperties)){
+           response.status(400);
+        } else {
+            Method save = this.resourceClass.getMethod("save");
+            return (String) save.invoke(this.resourceClass.newInstance());
+        }
         return "";
     }
 

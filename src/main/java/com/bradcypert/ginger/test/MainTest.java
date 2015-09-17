@@ -1,8 +1,6 @@
 package com.bradcypert.ginger.test;
 
 import com.bradcypert.ginger.Resource;
-import com.bradcypert.ginger.test.Todo;
-import static spark.Spark.*;
 
 /**
  * Created by brad on 9/15/15.
