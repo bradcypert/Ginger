@@ -83,6 +83,7 @@ public class Resource {
            response.status(400);
         } else {
             Method save = this.resourceClass.getMethod("save");
+            response.status(201);
             return (String) save.invoke(this.resourceClass.newInstance());
         }
         return "";
