@@ -81,10 +81,11 @@ public class Resource {
     private String handlePost(spark.Request request, Response response) throws Exception {
         if(!this.exposedProperties.isEmpty() && !RequestHelpers.containsParams(request, this.exposedProperties)){
            response.status(400);
-            return "";
+            return "{error: 'missing required parameters'}";
         } else {
             Method save = this.resourceClass.getMethod("save");
             PropertyMap map = new PropertyMap(request, this.exposedProperties);
+            response.status(201);
             return (String) save.invoke(this.resourceClass.newInstance());
         }
     }
