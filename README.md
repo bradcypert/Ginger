@@ -14,16 +14,17 @@ First off, congratulations on the first steps towards simple RESTful routing for
 #### Todo.java
 ```java
 import com.bradcypert.ginger.Methods;
+import com.bradcypert.ginger.Model;
 
 @Methods
-public class Todo {
-    public String name;
-    public int id;
+public class Todo implements Model{
+    @Exposed public String name;
+    @Exposed public int id;
     public boolean finished;
-    private double someNumber; //private variables are not exposed
+    @Exposed private double someNumber;
     
     //called on Post
-    public void save(){}
+    public String save(){}
 
     //called on Get /todo/:id
     public String fetch(){
@@ -36,10 +37,10 @@ public class Todo {
     }
     
     //called on Delete
-    public void remove(){}
+    public String remove(){}
     
     //called on Put
-    public void update(){}
+    public String update(){}
 }
 ```
 
