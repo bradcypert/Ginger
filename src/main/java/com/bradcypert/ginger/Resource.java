@@ -1,5 +1,6 @@
 package com.bradcypert.ginger;
 
+import com.bradcypert.ginger.helpers.RequestHelpers;
 import spark.Response;
 
 import java.lang.annotation.Annotation;
@@ -8,7 +9,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import static spark.Spark.*;
 
@@ -30,7 +30,8 @@ public class Resource {
         Field[] fields = this.resourceClass.getDeclaredFields();
         Arrays.asList(fields).forEach(field ->
             Arrays.asList(field.getDeclaredAnnotations()).forEach(annotation -> {
-                if(annotation.toString().endsWith("ginger.Exposed")){
+                if(annotation.toString().endsWith("ginger.Exposed()")){
+                    System.out.println(field.getName());
                     this.exposedProperties.add(field.getName());
                 }
             })
@@ -78,14 +79,14 @@ public class Resource {
     }
 
     private String handlePost(spark.Request request, Response response) throws Exception {
-        Request req = (Request) request;
-        if(!this.exposedProperties.isEmpty() || !req.containsParams(this.exposedProperties)){
+        if(!this.exposedProperties.isEmpty() && !RequestHelpers.containsParams(request, this.exposedProperties)){
            response.status(400);
+            return "";
         } else {
             Method save = this.resourceClass.getMethod("save");
+            PropertyMap map = new PropertyMap(request, this.exposedProperties);
             return (String) save.invoke(this.resourceClass.newInstance());
         }
-        return "";
     }
 
 }
