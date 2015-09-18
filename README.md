@@ -1,5 +1,11 @@
 # Ginger
-Ginger - Opinionated MVC Framework powered by Spark
+Ginger - Opinionated Resource-Based Framework powered by Spark.
+
+1. Define a Model.
+2. Declare a Resource.
+3. Run your app.
+
+It's that simple.
 
 # Mission
 ```
