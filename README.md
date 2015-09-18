@@ -1,5 +1,5 @@
 # Ginger
-Ginger - Opinionated Resource-Based Framework powered by Spark.
+####Opinionated Resource-Based Framework powered by Spark.
 
 1. Define a Model.
 2. Declare a Resource.
