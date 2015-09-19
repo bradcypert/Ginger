@@ -2,14 +2,9 @@ package com.bradcypert.ginger.helpers;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Created by brad on 9/16/15.
- */
 public class RequestHelpers {
     public static boolean containsParams(spark.Request request,List params){
         List filtered = (List) params.stream().filter(param -> containsParam(request, (String) param)).collect(Collectors.toList());
@@ -25,14 +20,12 @@ public class RequestHelpers {
     }
 
     //Only supports JSON parameters currently. {name: 'something'}
-    private static boolean containsParamAsBodyParameter(spark.Request request, String name){
+    private static boolean containsParamAsBodyParameter(spark.Request request, String name) {
         Gson gson = new Gson();
         JsonObject json = gson.fromJson(request.body(), JsonObject.class);
-        return json.get(name).getAsString() != null;
+        return request.body() != null && json.get(name).getAsString() != null;
     }
 
-
-    //TODO: This fella is breaking on POST requests.
     public static String getParam(spark.Request request, String name){
         if(containsParamAsQueryParameter(request, name)){
             return request.params(name);
