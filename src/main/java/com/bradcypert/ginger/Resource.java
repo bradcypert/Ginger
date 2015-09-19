@@ -17,14 +17,41 @@ public class Resource {
     private Class resourceClass;
     private ArrayList<String> exposedProperties;
     private ArrayList<String> methods;
+    private String basePath;
 
     public Resource(Class clazz) {
         this.resourceClass = clazz;
         this.exposedProperties = new ArrayList<String>();
         this.methods = new ArrayList<String>();
+        this.basePath = "";
 
         generateExposedProperties();
         generateResourceMethods();
+    }
+
+    public void setBasePath(String path){
+        this.basePath = path;
+    }
+
+    public void generateRoutes() {
+        String name = this.resourceClass.getSimpleName().toLowerCase();
+        String path = this.basePath + "/"+name;
+        for(String method: this.methods){
+            switch(method){
+                case "GET":
+                    get(path+"/", this::handleGetAll);
+                    get(path+"/:id", this::handleGet);
+                    break;
+                case "PUT":
+                    put(path+"/", this::handlePut);
+                    break;
+                case "DELETE":
+                    delete(path+"/:id", this::handleDelete);
+                    break;
+                case "POST":
+                    post(path+"/", this::handlePost);
+            }
+        }
     }
 
     private void generateExposedProperties() {
@@ -41,29 +68,8 @@ public class Resource {
     private void generateResourceMethods() {
         Annotation[] annotations = this.resourceClass.getAnnotations();
         Arrays.asList(annotations).forEach(annotation ->
-            Arrays.asList(((Methods) annotation).value()).forEach(value -> this.methods.add(value))
+                        Arrays.asList(((Methods) annotation).value()).forEach(value -> this.methods.add(value))
         );
-    }
-
-
-    public void generateRoutes() {
-        String name = this.resourceClass.getSimpleName().toLowerCase();
-        for(String method: this.methods){
-            switch(method){
-                case "GET":
-                    get("/"+name+"/", this::handleGetAll);
-                    get("/"+name+"/:id", this::handleGet);
-                    break;
-                case "PUT":
-                    put("/"+name+"/", this::handlePut);
-                    break;
-                case "DELETE":
-                    delete("/"+name+"/:id", this::handleDelete);
-                    break;
-                case "POST":
-                    post("/" + name + "/", this::handlePost);
-            }
-        }
     }
 
     private String handleGetAll(Request request, Response response) throws Exception {
