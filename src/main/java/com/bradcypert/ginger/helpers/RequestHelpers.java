@@ -3,6 +3,7 @@ package com.bradcypert.ginger.helpers;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,6 +43,7 @@ public class RequestHelpers {
             return request.params(name);
         } else {
             Gson gson = new Gson();
+            System.out.println(request.body());
             JsonObject json = gson.fromJson(request.body(), JsonObject.class);
             return json.get(name).getAsString();
         }
