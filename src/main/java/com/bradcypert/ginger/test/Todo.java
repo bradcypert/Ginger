@@ -2,10 +2,8 @@ package com.bradcypert.ginger.test;
 
 import com.bradcypert.ginger.Exposed;
 import com.bradcypert.ginger.Model;
-import com.bradcypert.ginger.Methods;
 import com.bradcypert.ginger.PropertyMap;
 
-@Methods
 public class Todo implements Model {
     @Exposed public String name;
     @Exposed public int id;

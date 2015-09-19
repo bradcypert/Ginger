@@ -13,19 +13,11 @@ import java.util.stream.Collectors;
 public class RequestHelpers {
     public static boolean containsParams(spark.Request request,List params){
         List filtered = (List) params.stream().filter(param -> containsParam(request, (String) param)).collect(Collectors.toList());
-        if(filtered.size() != params.size()){
-            return false;
-        } else {
-            return true;
-        }
+        return filtered.size() == params.size();
     }
 
     public static boolean containsParam(spark.Request request, String name) {
-        if(containsParamAsQueryParameter(request, name) || containsParamAsBodyParameter(request, name)) {
-            return true;
-        } else {
-            return false;
-        }
+        return containsParamAsQueryParameter(request, name) || containsParamAsBodyParameter(request, name);
     }
 
     private static boolean containsParamAsQueryParameter(spark.Request request, String name) {
