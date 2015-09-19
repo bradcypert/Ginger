@@ -1,6 +1,7 @@
 package com.bradcypert.ginger;
 
 import com.bradcypert.ginger.helpers.RequestHelpers;
+import spark.Request;
 import spark.Response;
 
 import java.lang.annotation.Annotation;
@@ -29,12 +30,11 @@ public class Resource {
     private void generateExposedProperties() {
         Field[] fields = this.resourceClass.getDeclaredFields();
         Arrays.asList(fields).forEach(field ->
-            Arrays.asList(field.getDeclaredAnnotations()).forEach(annotation -> {
-                if(annotation.toString().endsWith("ginger.Exposed()")){
-                    System.out.println(field.getName());
-                    this.exposedProperties.add(field.getName());
-                }
-            })
+                        Arrays.asList(field.getDeclaredAnnotations()).forEach(annotation -> {
+                            if (annotation.toString().endsWith("ginger.Exposed()")) {
+                                this.exposedProperties.add(field.getName());
+                            }
+                        })
         );
     }
 
@@ -51,13 +51,14 @@ public class Resource {
         for(String method: this.methods){
             switch(method){
                 case "GET":
+                    get("/"+name+"/", this::handleGetAll);
                     get("/"+name+"/:id", this::handleGet);
                     break;
                 case "PUT":
                     put("/"+name+"/", this::handlePut);
                     break;
                 case "DELETE":
-                    delete("/"+name+"/", this::handleDelete);
+                    delete("/"+name+"/:id", this::handleDelete);
                     break;
                 case "POST":
                     post("/" + name + "/", this::handlePost);
@@ -65,29 +66,44 @@ public class Resource {
         }
     }
 
-    private String handleGet(spark.Request request, Response response) throws Exception {
-        Method fetch = this.resourceClass.getMethod("fetch");
+    private String handleGetAll(Request request, Response response) throws Exception {
+        Method fetch = this.resourceClass.getMethod("fetchAll");
+        response.type("application/json");
+
         return (String) fetch.invoke(this.resourceClass.newInstance());
     }
 
+    private String handleGet(spark.Request request, Response response) throws Exception {
+        Method fetch = this.resourceClass.getMethod("fetch", String.class);
+        response.type("application/json");
+
+        return (String) fetch.invoke(this.resourceClass.newInstance(), request.params("id"));
+    }
+
     private String handlePut(spark.Request request, Response response) {
+        response.type("application/json");
         return "";
     }
 
-    private String handleDelete(spark.Request request, Response response) {
-        return "";
+    private String handleDelete(spark.Request request, Response response) throws Exception {
+        Method delete = this.resourceClass.getMethod("remove", String.class);
+        response.type("application/json");
+
+        return (String) delete.invoke(this.resourceClass.newInstance(), request.params("id"));
     }
 
     private String handlePost(spark.Request request, Response response) throws Exception {
+        Method save = this.resourceClass.getMethod("save", PropertyMap.class);
+        response.type("application/json");
+
         if(!this.exposedProperties.isEmpty() && !RequestHelpers.containsParams(request, this.exposedProperties)){
-           response.status(400);
+            response.status(400);
             return "{error: 'missing required parameters'}";
         } else {
-            Method save = this.resourceClass.getMethod("save");
-            PropertyMap map = new PropertyMap(request, this.exposedProperties);
             response.status(201);
-            return (String) save.invoke(this.resourceClass.newInstance());
+            return (String) save.invoke(this.resourceClass.newInstance(), new PropertyMap(request, this.exposedProperties));
         }
+
     }
 
 }

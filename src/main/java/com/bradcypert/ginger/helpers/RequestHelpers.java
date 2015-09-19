@@ -32,8 +32,11 @@ public class RequestHelpers {
         return request.params(name) != null;
     }
 
+    //Only supports JSON parameters currently. {name: 'something'}
     private static boolean containsParamAsBodyParameter(spark.Request request, String name){
-        return request.body().contains("name=\""+name+"\"");
+        Gson gson = new Gson();
+        JsonObject json = gson.fromJson(request.body(), JsonObject.class);
+        return json.get(name).getAsString() != null;
     }
 
 
@@ -43,7 +46,6 @@ public class RequestHelpers {
             return request.params(name);
         } else {
             Gson gson = new Gson();
-            System.out.println(request.body());
             JsonObject json = gson.fromJson(request.body(), JsonObject.class);
             return json.get(name).getAsString();
         }

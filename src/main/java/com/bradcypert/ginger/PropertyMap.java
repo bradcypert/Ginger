@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by brad on 9/17/15.
  */
-class PropertyMap extends HashMap {
+public class PropertyMap extends HashMap {
     protected PropertyMap(spark.Request r, List keys) {
         keys.forEach(key -> {
             this.put(key, RequestHelpers.getParam(r, key.toString()));
