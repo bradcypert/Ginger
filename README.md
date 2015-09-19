@@ -1,4 +1,6 @@
 # Ginger
+[![Build Status](https://travis-ci.org/bradcypert/Ginger.svg)](https://travis-ci.org/bradcypert/Ginger) 
+[![] (https://img.shields.io/github/license/mashape/apistatus.svg)] (https://github.com/bradcypert/Ginger/blob/master/LICENSE.md)
 ####Opinionated Resource-Based Framework powered by Spark.
 
 1. Define a Model.
