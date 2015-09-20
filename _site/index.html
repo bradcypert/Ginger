@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+<title>Ginger Docs</title>
+<meta name="viewport" content="width=device-width">
+<meta name="author" content="Brad Cypert">
+<link rel="stylesheet" href="css/main.css">
+<link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:500,600' rel='stylesheet' type='text/css'>
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="overview">
+                <span class="toggle">close</span>
+                <header>
+    <span>Ginger Docs v1.1</span>
+</header>
+
+                <ul id="nav">
+    
+    
+    <li  class=" current">
+        <a href="#intro">Ginger</a>
+        
+    </li>
+    
+    <li  class="parent">
+        <a href="#set-up">Set Up</a>
+        
+            <ul>
+                
+                
+                    <li >
+                        <a href="#config">Setting up a Resource</a>
+                        
+                    </li>
+                
+                    <li >
+                        <a href="#sass">Activating a Resource</a>
+                        
+                    </li>
+                
+            </ul>
+        
+    </li>
+    
+    <li  class="parent">
+        <a href="#content">Deep Dive</a>
+        
+            <ul>
+                
+                
+                    <li >
+                        <a href="#collection-entries">Resource</a>
+                        
+                    </li>
+                
+                    <li >
+                        <a href="#section-types">Property Map</a>
+                        
+                    </li>
+                
+            </ul>
+        
+    </li>
+    
+</ul>
+            </div>
+
+            <div class="content">
+                <span class="toggle">open</span>
+                
+
+    
+        <section id="intro" class="h1">
+            
+                    <h1>Ginger</h1>
+                
+
+            <p>Ginger is a opinionated Resource Routing framework applied on top of Spark.<br />
+One of the goals for Ginger is to be as simple as possible to get started with, yet flexible enough to extend as needed.<br />
+Ginger may not be right for everyone. Ask your developer if Ginger is right for you.</p>
+
+        </section>
+    
+
+    
+        <section id="set-up" class="h1">
+            
+                    <h1>Set Up</h1>
+                
+
+            <p>It’s important to note that since Ginger is heavily tied to Spark, we only support Java8 (as is the case with Spark).<br />
+You can add Ginger to your project by adding it to your build.gradle file, as a dependency.</p>
+
+<div class="highlight"><pre><code class="language-groovy" data-lang="groovy"><span class="n">compile</span> <span class="s1">&#39;com.bradcypert.Ginger:1.1.0-RC1&#39;</span></code></pre></div>
+
+
+        </section>
+    
+
+    
+        <section id="config" class="h2">
+            
+                    <h2>Setting up a Resource</h2>
+                
+
+            <p>Ginger is broken up into two separate pieces - ginger.Model and ginger.Resource.<br />
+The Model defines what the RESTful Resource should look like, and the Resource reflects upon that model, to generate your routes for you.</p>
+
+<p>Let’s go ahead and write a simple Model. In the spirit of elementary programming, we’ll make a Todo list.</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">com.bradcypert.ginger.Exposed</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.bradcypert.ginger.Model</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.bradcypert.ginger.Methods</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.bradcypert.ginger.PropertyMap</span><span class="o">;</span>
+
+<span class="nd">@Methods</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Todo</span> <span class="kd">implements</span> <span class="n">Model</span> <span class="o">{</span>
+    <span class="nd">@Exposed</span> <span class="kd">public</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+    <span class="nd">@Exposed</span> <span class="kd">public</span> <span class="kt">int</span> <span class="n">id</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="n">finished</span><span class="o">;</span>
+
+    <span class="nd">@Exposed</span> <span class="kd">private</span> <span class="kt">double</span> <span class="n">someNumber</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">save</span><span class="o">(</span><span class="n">PropertyMap</span> <span class="n">map</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">&quot;{\&quot;somejazz\&quot;: \&quot;jazz\&quot;}&quot;</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">fetch</span><span class="o">(</span><span class="n">String</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">&quot;{\&quot;name\&quot;: \&quot;Work Out\&quot;, \&quot;completed\&quot;: false}&quot;</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">fetchAll</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">&quot;[{\&quot;name\&quot;: \&quot;Work Out\&quot;, \&quot;completed\&quot;: false}, {\&quot;name\&quot;: \&quot;Sleep in\&quot;, \&quot;completed\&quot;: true}]&quot;</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">remove</span><span class="o">(</span><span class="n">String</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">&quot;{\&quot;deleted\&quot;: true}&quot;</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
+
+<p>There’s quite a few things going on here, so let’s cover them in detail. First off, we’re importing the parts of the Ginger framework that we need. The next thing you’ll notice, is the <code>@Methods</code> annotation. <code>@Methods</code> tells the model that it’s going to support <code>GET</code>, <code>POST</code>, and <code>DELETE</code> HTTP verbs. The ginger.Resource (that’ll we’ll write in a moment) reads this to determine which routes to generate. If, for example, you only wanted to support <code>GET</code>, and <code>POST</code>, you could write the following: <code>@Methods(value={"GET", "POST"})</code>.</p>
+
+<p><strong>NOTE: Support for more HTTP verbs coming soon.</strong></p>
+
+<p>Next, you’ll noticed that our class implements <code>ginger.Model</code>. This interface is necessary to be implemented as the Resource requires the interfaces methods to exist. Those methods are the ones with the <code>@Override</code> annotation tied to them.</p>
+
+<p>Here’s a simple mapping of what routes map to which Model Methods.</p>
+
+<div class="highlight"><pre><code class="language-groovy" data-lang="groovy"><span class="n">GET</span>     <span class="s">/todo/</span>       <span class="o">=&gt;</span> <span class="n">fetchAll</span><span class="o">()</span>
+<span class="n">GET</span>     <span class="s">/todo/</span><span class="o">:</span><span class="n">id</span><span class="s">/   =&gt; fetch()</span>
+<span class="s">POST    /</span><span class="n">todo</span><span class="s">/       =&gt; save()</span>
+<span class="s">DELETE  /</span><span class="n">todo</span><span class="s">/:id/</span>   <span class="o">=&gt;</span> <span class="n">remove</span><span class="o">()</span></code></pre></div>
+
+<p>The last thing to note about the Model is the <code>@Exposed</code> tag. Any member variables tagged with <code>@Exposed</code> will be <strong>REQUIRED</strong> to be sent in on a POST request. For example, in the Java code above, our <code>POST</code> route has to either have query or body params of <code>name</code>, <code>id</code>, and <code>someNumber</code>. If these parameters are not there, the server will return a 400 error code.</p>
+
+<p>It’s important to keep in mind that your Model is actually just a template. Long term data shouldn’t be stored in the model, as Ginger will destroy and create instances of it, as it sees fit. What this means is simple - The methods <code>save</code>, <code>fetch</code>, <code>fetchAll</code>, and <code>remove</code> should be fully state-independent. Here is where you would plug in your ORM or execute SQL Queries or whatever you need to do.</p>
+
+        </section>
+    
+
+    
+        <section id="sass" class="h2">
+            
+                    <h2>Activating a Resource</h2>
+                
+
+            <p>Once you’ve declared a model, like we did above, the final step is simple.<br />
+From your main entry point, you can simply write:</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">//import com.bradcypert.ginger.Resource;</span>
+
+<span class="n">Resource</span> <span class="n">todos</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Resource</span><span class="o">(</span><span class="n">Todo</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+<span class="n">todos</span><span class="o">.</span><span class="na">generateRoutes</span><span class="o">();</span></code></pre></div>
+
+<p>This will generate all the required routes for your Model, and plug them into Spark (the routing framework that is used under the covers). Once your code runs, you should be able to hit <code>localhost:4567/todo/</code> in your browser and get a list of your Todos.</p>
+
+        </section>
+    
+
+    
+        <section id="content" class="h1">
+            
+                    <h1>Deep Dive</h1>
+                
+
+            <p>So now that you’ve seen the basics of setting up a Ginger service, let’s take a deep dive into the actual docs for the classes provided.<br />
+If you can’t find what you’re looking for here, I strongly recommend checking out <a href="http://http://sparkjava.com/documentation.html">Spark’s Documentation</a> as Ginger uses Spark under the hood.</p>
+
+        </section>
+    
+
+    
+        <section id="collection-entries" class="h2">
+            
+                    <h2>Resource</h2>
+                
+
+            <p>The Resource is the main code generator in Ginger. The Methods are as follows.</p>
+
+<h5 id="public-resourceclass-clazz">public Resource(Class clazz)</h5>
+<p>The constructor is called to set up the initial resource. You need to pass in the class of an object that implements the ginger.Model interface.</p>
+
+<p>Code Example:</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Resource</span> <span class="n">todos</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Resource</span><span class="o">(</span><span class="n">Todo</span><span class="o">.</span><span class="na">class</span><span class="o">);</span></code></pre></div>
+
+<h5 id="public-void-generateroutes">public void generateRoutes()</h5>
+<p>Generate routes needs to be called before you can actually use the routes provided. Generally, you’ll see something like this.</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="k">new</span> <span class="nf">Resource</span><span class="o">(</span><span class="n">Todo</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">generateRoutes</span><span class="o">();</span></code></pre></div>
+
+<p>This will generate all the applicable routes based on your <code>@Methods</code> declaration in your Model.</p>
+
+<h5 id="public-void-setbasepathstring-path">public void setBasePath(String path)</h5>
+<p><code>setBasePath</code> will prepend a string onto the routes for the resource. For example:</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Resource</span> <span class="n">todos</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Resource</span><span class="o">(</span><span class="n">Todo</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+<span class="n">todos</span><span class="o">.</span><span class="na">generateRoutes</span><span class="o">();</span></code></pre></div>
+
+<p>The above example will generate, for example, <code>localhost:4567/todo/</code>.</p>
+
+<p>Perhaps, you want to prepend <code>/api/v1</code> to the resource. You can do so with the following.</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Resource</span> <span class="n">todos</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Resource</span><span class="o">(</span><span class="n">Todo</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+<span class="n">todos</span><span class="o">.</span><span class="na">setBasePath</span><span class="o">(</span><span class="s">&quot;/api/v1&quot;</span><span class="o">);</span>
+<span class="n">todos</span><span class="o">.</span><span class="na">generateRoutes</span><span class="o">();</span></code></pre></div>
+
+
+        </section>
+    
+
+    
+        <section id="section-types" class="h3">
+            
+                    <h3>Property Map</h3>
+                
+
+            <p>Currently, the Property Map class is a minimal extension on Java’s HashMap, that simply implementes a custom constructor.</p>
+
+<h5 id="public-propertymapsparkrequest-request-list-mappings">public PropertyMap(spark.Request request, List mappings)</h5>
+
+<p>The constructor simply takes in a spark.Request and a List of strings. These strings are then iterated over, and the associated params are pulled out and stored on the underlying HashMap object. <strong>Odds are, you probably won’t NEED this class, and can simply treat it like a HashMap whenever you see it being used</strong>.</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">request</span>     <span class="o">=&gt;</span>    <span class="n">spark</span><span class="o">.</span><span class="n">Request</span> <span class="n">object</span>
+<span class="n">mappings</span>    <span class="o">=&gt;</span>    <span class="no">List</span> <span class="n">of</span> <span class="no">Strings</span> <span class="n">that</span> <span class="n">you</span><span class="err">&#39;</span><span class="n">d</span> <span class="n">like</span> <span class="n">to</span> <span class="n">pull</span> <span class="n">from</span> <span class="n">the</span> <span class="n">map</span><span class="o">.</span></code></pre></div>
+
+
+        </section>
+    
+
+
+            </div>
+        </div>
+
+        <script src="js/jquery-2.1.1.min.js"></script>
+        <script scr="js/jquery.scrollTo.js"></script>
+        <script src="js/jquery.nav.js"></script>
+        <script src="js/scripts.js"></script>
+        <!-- Google Analytics Tracking Code - replace with you own analytics code -->
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+            ga('create', 'UA-50358022-3', 'auto');
+            ga('send', 'pageview');
+        </script>
+    </body>
+</html>
