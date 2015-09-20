@@ -18,78 +18,78 @@
 </header>
 
                 <ul id="nav">
-    
-    
+
+
     <li  class=" current">
         <a href="#intro">Ginger</a>
-        
+
     </li>
-    
+
     <li  class="parent">
         <a href="#set-up">Set Up</a>
-        
+
             <ul>
-                
-                
+
+
                     <li >
                         <a href="#config">Setting up a Resource</a>
-                        
+
                     </li>
-                
+
                     <li >
                         <a href="#sass">Activating a Resource</a>
-                        
+
                     </li>
-                
+
             </ul>
-        
+
     </li>
-    
+
     <li  class="parent">
         <a href="#content">Deep Dive</a>
-        
+
             <ul>
-                
-                
+
+
                     <li >
                         <a href="#collection-entries">Resource</a>
-                        
+
                     </li>
-                
+
                     <li >
                         <a href="#section-types">Property Map</a>
-                        
+
                     </li>
-                
+
             </ul>
-        
+
     </li>
-    
+
 </ul>
             </div>
 
             <div class="content">
                 <span class="toggle">open</span>
-                
 
-    
+
+
         <section id="intro" class="h1">
-            
+
                     <h1>Ginger</h1>
-                
+
 
             <p>Ginger is a opinionated Resource Routing framework applied on top of Spark.<br />
 One of the goals for Ginger is to be as simple as possible to get started with, yet flexible enough to extend as needed.<br />
 Ginger may not be right for everyone. Ask your developer if Ginger is right for you.</p>
 
         </section>
-    
 
-    
+
+
         <section id="set-up" class="h1">
-            
+
                     <h1>Set Up</h1>
-                
+
 
             <p>It’s important to note that since Ginger is heavily tied to Spark, we only support Java8 (as is the case with Spark).<br />
 You can add Ginger to your project by adding it to your build.gradle file, as a dependency.</p>
@@ -98,13 +98,13 @@ You can add Ginger to your project by adding it to your build.gradle file, as a 
 
 
         </section>
-    
 
-    
+
+
         <section id="config" class="h2">
-            
+
                     <h2>Setting up a Resource</h2>
-                
+
 
             <p>Ginger is broken up into two separate pieces - ginger.Model and ginger.Resource.<br />
 The Model defines what the RESTful Resource should look like, and the Resource reflects upon that model, to generate your routes for you.</p>
@@ -163,13 +163,13 @@ The Model defines what the RESTful Resource should look like, and the Resource r
 <p>It’s important to keep in mind that your Model is actually just a template. Long term data shouldn’t be stored in the model, as Ginger will destroy and create instances of it, as it sees fit. What this means is simple - The methods <code>save</code>, <code>fetch</code>, <code>fetchAll</code>, and <code>remove</code> should be fully state-independent. Here is where you would plug in your ORM or execute SQL Queries or whatever you need to do.</p>
 
         </section>
-    
 
-    
+
+
         <section id="sass" class="h2">
-            
+
                     <h2>Activating a Resource</h2>
-                
+
 
             <p>Once you’ve declared a model, like we did above, the final step is simple.<br />
 From your main entry point, you can simply write:</p>
@@ -182,25 +182,25 @@ From your main entry point, you can simply write:</p>
 <p>This will generate all the required routes for your Model, and plug them into Spark (the routing framework that is used under the covers). Once your code runs, you should be able to hit <code>localhost:4567/todo/</code> in your browser and get a list of your Todos.</p>
 
         </section>
-    
 
-    
+
+
         <section id="content" class="h1">
-            
+
                     <h1>Deep Dive</h1>
-                
+
 
             <p>So now that you’ve seen the basics of setting up a Ginger service, let’s take a deep dive into the actual docs for the classes provided.<br />
 If you can’t find what you’re looking for here, I strongly recommend checking out <a href="http://http://sparkjava.com/documentation.html">Spark’s Documentation</a> as Ginger uses Spark under the hood.</p>
 
         </section>
-    
 
-    
+
+
         <section id="collection-entries" class="h2">
-            
+
                     <h2>Resource</h2>
-                
+
 
             <p>The Resource is the main code generator in Ginger. The Methods are as follows.</p>
 
@@ -234,13 +234,13 @@ If you can’t find what you’re looking for here, I strongly recommend checkin
 
 
         </section>
-    
 
-    
+
+
         <section id="section-types" class="h3">
-            
+
                     <h3>Property Map</h3>
-                
+
 
             <p>Currently, the Property Map class is a minimal extension on Java’s HashMap, that simply implementes a custom constructor.</p>
 
@@ -253,7 +253,7 @@ If you can’t find what you’re looking for here, I strongly recommend checkin
 
 
         </section>
-    
+
 
 
             </div>
