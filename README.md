@@ -10,6 +10,9 @@
 
 It's that simple.
 
+####Want a Sample App? [Sample App](http://www.github.com/bradcypert/GingerSampleApp).
+####Want Docs? [Docs](http://bradcypert.github.io/Ginger/).
+
 # Mission
 ```
 "If you’re betwixt and between, trust the one with red hair." – O.R. Melling, The Hunter’s Moon
