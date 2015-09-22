@@ -1,0 +1,5 @@
+.gradle/
+build/
+gradle.properties
+maven.gradle
+.idea/workspace.xml

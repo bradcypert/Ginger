@@ -1,7 +1,7 @@
 full_rebuild: true
 name: Ginger Docs
 author: Brad Cypert
-version: v1.1.0
+version: v1.1.2
 encoding: utf-8
 defaults:
   -
