@@ -20,12 +20,18 @@ public class Resource {
     private String basePath;
     private Object instance;
 
-    public Resource(Class clazz) throws IllegalAccessException, InstantiationException {
+    public Resource(Class clazz) {
         this.resourceClass = clazz;
         this.exposedProperties = new ArrayList<String>();
         this.methods = new ArrayList<String>();
         this.basePath = "";
-        this.instance = this.resourceClass.newInstance();
+
+        try {
+            this.instance = this.resourceClass.newInstance();
+        } catch (Exception e) {
+            this.instance = null;
+        }
+
 
         generateExposedProperties();
         generateResourceMethods();
