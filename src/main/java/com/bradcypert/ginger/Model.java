@@ -1,8 +1,8 @@
 package com.bradcypert.ginger;
 
 public interface Model {
-    String save(PropertyMap map);
-    String fetch(String id);
-    String fetchAll();
-    String remove(String id);
+    default String save(PropertyMap map) { return "{\"Save is set up\": false}"; };
+    default String fetch(String id) { return "{\"Fetch is set up\": false}"; };
+    default String fetchAll() { return "{\"FetchAll is set up\": false}"; };
+    default String remove(String id) { return "{\"Remove is set up\": false}"; };
 }
