@@ -26,6 +26,16 @@ new Resource(Todo.class).generateRoutes();
 
 This will generate all the applicable routes based on your `@Methods` declaration in your Model.
 
+##### public Object getInstance()
+Returns the instance of the model created by the Resource. If you need to access anything on your model class outside of normal routing, you probably want to call this method to get ahold of the instance.
+
+{% highlight java %}
+Todo instance = (Todo) new Resource(Todo.class).getInstance();
+{% endhighlight %}
+
+This will generate all the applicable routes based on your `@Methods` declaration in your Model.
+
+
 ##### public void setBasePath(String path)
 `setBasePath` will prepend a string onto the routes for the resource. For example:
 
