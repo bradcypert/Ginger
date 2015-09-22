@@ -18,15 +18,21 @@ public class Resource {
     private ArrayList<String> exposedProperties;
     private ArrayList<String> methods;
     private String basePath;
+    private Object instance;
 
-    public Resource(Class clazz) {
+    public Resource(Class clazz) throws IllegalAccessException, InstantiationException {
         this.resourceClass = clazz;
         this.exposedProperties = new ArrayList<String>();
         this.methods = new ArrayList<String>();
         this.basePath = "";
+        this.instance = this.resourceClass.newInstance();
 
         generateExposedProperties();
         generateResourceMethods();
+    }
+
+    public Object getInstance(){
+        return this.instance;
     }
 
     public void setBasePath(String path){
@@ -76,14 +82,14 @@ public class Resource {
         Method fetch = this.resourceClass.getMethod("fetchAll");
         response.type("application/json");
 
-        return (String) fetch.invoke(this.resourceClass.newInstance());
+        return (String) fetch.invoke(instance);
     }
 
     private String handleGet(spark.Request request, Response response) throws Exception {
         Method fetch = this.resourceClass.getMethod("fetch", String.class);
         response.type("application/json");
 
-        return (String) fetch.invoke(this.resourceClass.newInstance(), request.params("id"));
+        return (String) fetch.invoke(instance, request.params("id"));
     }
 
     private String handlePut(spark.Request request, Response response) {
@@ -95,7 +101,7 @@ public class Resource {
         Method delete = this.resourceClass.getMethod("remove", String.class);
         response.type("application/json");
 
-        return (String) delete.invoke(this.resourceClass.newInstance(), request.params("id"));
+        return (String) delete.invoke(instance, request.params("id"));
     }
 
     private String handlePost(spark.Request request, Response response) throws Exception {
@@ -107,7 +113,7 @@ public class Resource {
             return "{error: 'missing required parameters'}";
         } else {
             response.status(201);
-            return (String) save.invoke(this.resourceClass.newInstance(), new PropertyMap(request, this.exposedProperties));
+            return (String) save.invoke(instance, new PropertyMap(request, this.exposedProperties));
         }
 
     }
