@@ -95,6 +95,6 @@ public class TodoService {
 }
 ```
 
-And that's it! By default, the server runs on post :4567, so run your app, fire up localhost:4567, and give it a go!
+And that's it! By default, the server runs on port :4567, so run your app, fire up localhost:4567, and give it a go!
 
 If you need a more in-depth example, [check out this directory](https://github.com/bradcypert/Ginger/tree/master/src/main/java/com/bradcypert/ginger/test). It's the folder that houses the sample-test app, built on Ginger, and should always be up to date with the latest build.
