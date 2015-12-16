@@ -6,5 +6,5 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Methods {
-    String[] value() default {"GET", "PUT", "POST", "DELETE"};
+    String[] value() default {"GET", "PUT", "POST", "DELETE", "PATCH"};
 }

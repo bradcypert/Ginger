@@ -1,16 +1,13 @@
 package com.bradcypert.ginger;
 
 import com.bradcypert.ginger.helpers.RequestHelpers;
-import spark.Request;
-import spark.Response;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-
+import spark.Request;
+import spark.Response;
 import static spark.Spark.*;
 
 public class Resource {
@@ -22,8 +19,8 @@ public class Resource {
 
     public Resource(Class clazz) {
         this.resourceClass = clazz;
-        this.exposedProperties = new ArrayList<String>();
-        this.methods = new ArrayList<String>();
+        this.exposedProperties = new ArrayList<>();
+        this.methods = new ArrayList<>();
         this.basePath = "";
 
         try {
@@ -62,6 +59,9 @@ public class Resource {
                     break;
                 case "POST":
                     post(path+"/", this::handlePost);
+                    break;
+                case "PATCH":
+                    patch(path+"/", this::handlePatch);
             }
         }
     }
@@ -69,18 +69,18 @@ public class Resource {
     private void generateExposedProperties() {
         Field[] fields = this.resourceClass.getDeclaredFields();
         Arrays.asList(fields).forEach(field ->
-                        Arrays.asList(field.getDeclaredAnnotations()).forEach(annotation -> {
-                            if (annotation.toString().endsWith("ginger.Exposed()")) {
-                                this.exposedProperties.add(field.getName());
-                            }
-                        })
+            Arrays.asList(field.getDeclaredAnnotations()).forEach(annotation -> {
+                if (annotation.toString().endsWith("ginger.Exposed()")) {
+                    this.exposedProperties.add(field.getName());
+                }
+            })
         );
     }
 
     private void generateResourceMethods() {
         Annotation[] annotations = this.resourceClass.getAnnotations();
         Arrays.asList(annotations).forEach(annotation ->
-                        Arrays.asList(((Methods) annotation).value()).forEach(value -> this.methods.add(value))
+            Arrays.asList(((Methods) annotation).value()).forEach(this.methods::add)
         );
     }
 
@@ -98,9 +98,16 @@ public class Resource {
         return (String) fetch.invoke(instance, request.params("id"));
     }
 
-    private String handlePut(spark.Request request, Response response) {
+    private String handlePut(spark.Request request, Response response) throws Exception {
+        Method put = this.resourceClass.getMethod("replace", String.class);
         response.type("application/json");
-        return "";
+        if(!this.exposedProperties.isEmpty() && !RequestHelpers.containsParams(request, this.exposedProperties)){
+            response.status(400);
+            return "{error: 'missing required parameters'}";
+        } else {
+            response.status(200);
+            return (String) put.invoke(instance, request.params("id"), new PropertyMap(request, this.exposedProperties));
+        }
     }
 
     private String handleDelete(spark.Request request, Response response) throws Exception {
@@ -108,6 +115,18 @@ public class Resource {
         response.type("application/json");
 
         return (String) delete.invoke(instance, request.params("id"));
+    }
+
+    private String handlePatch(Request request, Response response) throws Exception{
+        Method patch = this.resourceClass.getMethod("update", String.class);
+        response.type("application/json");
+        if(!this.exposedProperties.isEmpty() && !RequestHelpers.containsParams(request, this.exposedProperties)){
+            response.status(400);
+            return "{error: 'missing requiredf parameters'}";
+        } else {
+            response.status(200);
+            return (String) patch.invoke(instance, request.params("id"), new PropertyMap(request, this.exposedProperties));
+        }
     }
 
     private String handlePost(spark.Request request, Response response) throws Exception {
@@ -121,7 +140,6 @@ public class Resource {
             response.status(201);
             return (String) save.invoke(instance, new PropertyMap(request, this.exposedProperties));
         }
-
     }
 
 }
