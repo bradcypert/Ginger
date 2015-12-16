@@ -69,7 +69,7 @@ It's important to note the following things.
 
 1. @Exposed is put on to a member variable that we want to REQUIRE on POST updates, and accept on put updates.
 2. You need to implement the ginger.Model Model. The methods it requires are called reflectively, similar to - dare I say - Callbacks in JavaScript.
-3. @Methods annotation is required as well. If you want to support `GET`, `PUT`, `POST`, and `DELETE`, you can simply include `@Methods`, else, you can specify the methods you want to support by passing in `@Methods(value = {"GET", "DELETE"})` where value is a String array containing the verbs you want to support. To support them all, simply use `@Methods`.
+3. @Methods annotation is required as well. If you want to support `GET`, `PUT`, `POST`, `PATCH`, `PUT`, and `DELETE`, you can simply include `@Methods`, else, you can specify the methods you want to support by passing in `@Methods(value = {"GET", "DELETE"})` where value is a String array containing the verbs you want to support. To support them all, simply use `@Methods`.
 4. Lastly, all the methods that are required by ginger.Model need to return a VALID JSON string. If they do not, you'll get an "invalid json" error when you hit that route.
 
 ####Route Mappings
@@ -79,6 +79,8 @@ When you create a new Resource from your class that implements a Model, some mag
 * GET      /myResource/:id/      =>  fetch()
 * DELETE   /myResource/:id/      =>  remove()
 * POST     /myResource/          =>  save()
+* PATCH    /myResource/:id/      =>  update()
+* PUT      /myResource/:id/      =>  replace()
 ```
 
 Note: Currently, the above methods need to be implemented, even if your api isn't supporting a specific verb, such as delete. You HAVE to implement the ginger.Model interface fully.
