@@ -12,6 +12,7 @@ It's that simple.
 
 ####Want a Sample App? [Sample App](http://www.github.com/bradcypert/GingerSampleApp).
 ####Want Docs? [Docs](http://bradcypert.github.io/Ginger/).
+####Want a Tutorial? [Brad Cypert's post on Ginger](http://www.bradcypert.com/getting-started-with-ginger/).
 
 # Mission
 ```
