@@ -1,8 +1,8 @@
 # Ginger
 [![Build Status](https://travis-ci.org/bradcypert/Ginger.svg)](https://travis-ci.org/bradcypert/Ginger) 
-[![] (https://img.shields.io/github/license/mashape/apistatus.svg)] (https://github.com/bradcypert/Ginger/blob/master/LICENSE.md)
-[![] (https://img.shields.io/badge/docs-1.1.2-orange.svg)] (http://bradcypert.github.io/Ginger/)
-####Opinionated Resource-Based Framework powered by Spark.
+[![](https://img.shields.io/badge/docs-1.1.2-orange.svg)](http://bradcypert.github.io/Ginger/)
+
+#### Opinionated Resource-Based Framework powered by Spark.
 
 1. Define a Model.
 2. Declare a Resource.
@@ -10,9 +10,9 @@
 
 It's that simple.
 
-####Want a Sample App? [Sample App](http://www.github.com/bradcypert/GingerSampleApp).
-####Want Docs? [Docs](http://bradcypert.github.io/Ginger/).
-####Want a Tutorial? [Brad Cypert's post on Ginger](http://www.bradcypert.com/getting-started-with-ginger/).
+#### Want a Sample App? [Sample App](http://www.github.com/bradcypert/GingerSampleApp).
+#### Want Docs? [Docs](http://bradcypert.github.io/Ginger/).
+#### Want a Tutorial? [Brad Cypert's post on Ginger](http://www.bradcypert.com/getting-started-with-ginger/).
 
 # Mission
 ```
@@ -21,7 +21,7 @@ It's that simple.
 
 Ginger is your go-to framework for Java webservices with a small footprint. It's built ontop of Spark as to keep the footprint as minimal as possible.  Instructions for use and for contributing are below.
 
-####Things to know.
+#### Things to know.
 * Requires Java8
 
 # Use
@@ -73,7 +73,7 @@ It's important to note the following things.
 3. @Methods annotation is required as well. If you want to support `GET`, `PUT`, `POST`, `PATCH`, `PUT`, and `DELETE`, you can simply include `@Methods`, else, you can specify the methods you want to support by passing in `@Methods(value = {"GET", "DELETE"})` where value is a String array containing the verbs you want to support. To support them all, simply use `@Methods`.
 4. Lastly, all the methods that are required by ginger.Model need to return a VALID JSON string. If they do not, you'll get an "invalid json" error when you hit that route.
 
-####Route Mappings
+#### Route Mappings
 When you create a new Resource from your class that implements a Model, some magical goodness happens under the hood. I'll do my best to describe these to you here, by showing you a list of mappings, but you can also check out Resource.java to see it yourself!
 ```
 * GET      /myResource/          =>  fetchAll()
